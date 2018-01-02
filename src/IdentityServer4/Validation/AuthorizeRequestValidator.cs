@@ -1,4 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
@@ -51,7 +51,8 @@ namespace IdentityServer4.Validation
 
         public async Task<AuthorizeRequestValidationResult> ValidateAsync(NameValueCollection parameters, ClaimsPrincipal subject = null)
         {
-            _logger.LogDebug("Start authorize request protocol validation");
+            //_logger.LogDebug("Start authorize request protocol validation");
+            _logger.Start("authorize request");
 
             var request = new ValidatedAuthorizeRequest
             {
@@ -90,7 +91,9 @@ namespace IdentityServer4.Validation
             }
 
             // custom validator
-            _logger.LogDebug("Calling into custom validator: {type}", _customValidator.GetType().FullName);
+            //_logger.LogDebug("Calling into custom validator: {type}", _customValidator.GetType().FullName);
+            _logger.CallCustomValidator(_customValidator.GetType().FullName);
+
             var context = new CustomAuthorizeRequestValidationContext
             {
                 Result = new AuthorizeRequestValidationResult(request)
@@ -104,7 +107,8 @@ namespace IdentityServer4.Validation
                 return Invalid(request, customResult.Error, customResult.ErrorDescription);
             }
 
-            _logger.LogTrace("Authorize request protocol validation successful");
+            //_logger.LogTrace("Authorize request protocol validation successful");
+            _logger.Success("authorize request");
 
             return Valid(request);
         }
@@ -117,7 +121,9 @@ namespace IdentityServer4.Validation
             var clientId = request.Raw.Get(OidcConstants.AuthorizeRequest.ClientId);
             if (clientId.IsMissingOrTooLong(_options.InputLengthRestrictions.ClientId))
             {
-                LogError("client_id is missing or too long", request);
+                //LogError("client_id is missing or too long", request);
+                _logger.MissingOrTooLong("client_id", request);
+
                 return Invalid(request, description: "Invalid client_id");
             }
 
