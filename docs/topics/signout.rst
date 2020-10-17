@@ -36,8 +36,8 @@ This API returns a ``LogoutRequest`` object with a ``SignOutIFrameUrl`` property
 
 **Back-channel server-side clients**
 
-To signout the user from the server-side client applications via the back-channel spec, the ``SignOutIFrameUrl`` endpoint in IdentityServer will automatically trigger server-to-server invocation passing a signed sign-out request to the client.
-This means that even if there are no front-channel clients, the "logged out" page in IdentityServer must still render an ``<iframe>`` to the ``SignOutIFrameUrl`` as described above.
+To signout the user from the server-side client applications via the back-channel spec the ``IBackChannelLogoutService`` service can be used. 
+IdentityServer will automatically use this service when your logout page removes the user's authentication cookie via a call to ``HttpContext.SignOutAsync``.
 Clients that wish to be notified must have the ``BackChannelLogoutUri`` configuration value set.
 
 **Browser-based JavaScript clients**
@@ -53,7 +53,7 @@ Processing at the end session endpoint might require some temporary state to be 
 This state might be of use to the logout page, and the identifier for the state is passed via a `logoutId` parameter to the logout page.
 
 The ``GetLogoutContextAsync`` API on the :ref:`interaction service <refInteractionService>` can be used to load the state.
-Of interest on the ``ShowSignoutPrompt`` is the ``ShowSignoutPrompt`` which indicates if the request for sign-out has been authenticated, and therefore it's safe to not prompt the user for sign-out.
+Of interest on the ``LogoutRequest`` model context class is the ``ShowSignoutPrompt`` which indicates if the request for sign-out has been authenticated, and therefore it's safe to not prompt the user for sign-out.
 
 By default this state is managed as a protected data structure passed via the `logoutId` value.
 If you wish to use some other persistence between the end session endpoint and the logout page, then you can implement ``IMessageStore<LogoutMessage>`` and register the implementation in DI.

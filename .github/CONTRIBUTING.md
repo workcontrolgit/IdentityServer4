@@ -5,7 +5,7 @@ Then we can decide if and how a feature or a change could be implemented and if 
 
 Also read this first: [Being a good open source citizen](https://hackernoon.com/being-a-good-open-source-citizen-9060d0ab9732#.x3hocgw85)
 
-## Found and issue or a bug?
+## Found an issue or a bug?
 Please start a discussion on the [core repo issue tracker](https://github.com/IdentityServer/IdentityServer4/issues).
 
 ## Filing issues
@@ -26,8 +26,6 @@ You will need to sign a contributor license agreement (CLA) before submitting yo
 Please make sure to include tests, that cover the changes/additions you made to the code base.
 
 Make sure you can build the code. Familiarize yourself with the project workflow and our coding conventions. If you don't know what a pull request is read this article: https://help.github.com/articles/using-pull-requests.
-
-**We only accept PRs to the dev branch.**
 
 Before submitting a feature or substantial code contribution please discuss it with the team and ensure it follows the product roadmap. Here's a list of blog posts that are worth reading before doing a pull request:
 

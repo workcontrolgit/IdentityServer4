@@ -13,40 +13,48 @@ We are roughly following the Microsoft guidelines for usage of log levels:
 * ``Error`` For errors and exceptions that cannot be handled. Examples: failed validation of a protocol request.
 * ``Critical`` For failures that require immediate attention. Examples: missing store implementation, invalid key material...
 
-Setup
-^^^^^
-We personally like `Serilog <https://serilog.net/>`_ a lot. Give it a try.
-
-For the following configuration you need the ``Serilog.Extensions.Logging`` and ``Serilog.Sinks.Console`` packages::
+Setup for Serilog
+^^^^^^^^^^^^^^^^^
+We personally like `Serilog <https://serilog.net/>`_ and the ``Serilog.AspNetCore`` package a lot. Give it a try::
 
     public class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            Console.Title = "IdentityServer4";
+            Activity.DefaultIdFormat = ActivityIdFormat.W3C;
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
                 .Enrich.FromLogContext()
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Literate)
+                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
                 .CreateLogger();
 
-            BuildWebHost(args).Run();
+            try
+            {
+                Log.Information("Starting host...");
+                CreateHostBuilder(args).Build().Run();
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Host terminated unexpectedly.");
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
-        public static IWebHost BuildWebHost(string[] args)
-        {
-            return WebHost.CreateDefaultBuilder(args)
-                    .UseStartup<Startup>()
-                    .ConfigureLogging(builder =>
-                    {
-                        builder.ClearProviders();
-                        builder.AddSerilog();
-                    })
-                    .Build();
-        }            
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
+                .UseSerilog()
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
-    

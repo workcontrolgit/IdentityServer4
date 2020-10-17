@@ -39,11 +39,11 @@ Please `get in touch <mailto:contact@identityserver.io>`_ with us to discuss pos
 
 **Training**
 
-We are regularly doing workshops around identity & acess control for modern applications.
+We are regularly doing workshops around identity & access control for modern applications.
 Check the agenda and upcoming public dates  `here <https://identityserver.io/training>`_.
 We can also perform the training privately at your company. 
 `Contact us <mailto:contact@identityserver.io>`_ to request the training on-site. 
 
-**Admin UI, Identity Express and SAML2p support**
+**AdminUI, WS-Federation, SAML2p, and FIDO2 support**
 
-There are a couple of commercial add-on products available from our partners, check https://www.identityserver.com/products/.
+There are commercial add-on products available from our partners, Rock Solid Knowledge, on `identityserver.com <https://www.identityserver.com/products>`_.
